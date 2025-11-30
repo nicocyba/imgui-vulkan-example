@@ -22,7 +22,7 @@ mkdir -p bin
 
 cmake -S . -B build && cmake --build build
 
-# cp ./build/bin/main ./bin
+cp ./build/bin/main ./bin
 
 clang-format-20 -i src/*.*pp
 
