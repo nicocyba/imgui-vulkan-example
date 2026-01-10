@@ -1,0 +1,14 @@
+# Suppress false positives from Vulkan drivers
+leak:libvulkan.so
+
+# Suppress false positives from dbus
+leak:libdbus-1.so
+
+# Suppress false positives from Mesa/graphics drivers
+leak:libEGL_mesa.so
+leak:libglapi.so
+leak:libnvidia
+leak:libdrm.so
+
+# Suppress pthread initialization
+leak:__pthread_once_slow

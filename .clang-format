@@ -12,6 +12,7 @@ BreakBeforeBraces: Attach # interesting
 BreakInheritanceList: BeforeComma
 BreakConstructorInitializers: BeforeColon
 Cpp11BracedListStyle: true
+ColumnLimit: 100
 SpaceBeforeCpp11BracedList: false
 SpaceInEmptyBlock: false
 IndentExternBlock: NoIndent

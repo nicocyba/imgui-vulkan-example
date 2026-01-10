@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+
+
 # Usage: ./eval.sh [--tidy|--no-tidy]
 # Default is to run clang-tidy. Pass --no-tidy to skip it.
 TIDY=0
@@ -39,5 +41,6 @@ fi
 # rm -rf build
 
 # ls -LR
-./bin/main
+# ./bin/main
+LSAN_OPTIONS=suppressions=lsan.supp ./bin/main
 exit $FAILED
