@@ -18,13 +18,15 @@ for arg in "$@"; do
 	esac
 done
 
-# rm -rf build
+rm -rf build
+mkdir -p build
 rm -rf bin
 mkdir -p bin
 
-cmake -S . -B build && cmake --build build
+# cmake -S . -B build && cmake --build build
+#cp ./build/bin/main ./bin
 
-cp ./build/bin/main ./bin
+docker build . --target export --output "type=local,dest=."
 
 clang-format-20 -i src/*.*pp
 
@@ -38,9 +40,40 @@ else
 fi
 
 [[ $FAILED == 0 ]] && echo "Checks PASSED." || echo "Some checks FAILED."
-# rm -rf build
 
-# ls -LR
-# ./bin/main
-LSAN_OPTIONS=suppressions=lsan.supp ./bin/main
+
+# Compile protobuf
+export PATH="$PATH:$HOME/.local/protoc-33.4-linux-x86_64/bin"
+SRC_DIR=src
+DST_DIR=src/messages
+protoc --version
+protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/addressbook.proto
+
+exit $FAILED
+
+# Launch app in background so we can position its window
+LSAN_OPTIONS=suppressions=lsan.supp ./bin/main &
+APP_PID=$!
+
+# Wait for the window to appear (up to ~10s)
+WIN_TITLE='Dear ImGui GLFW+Vulkan example'
+for i in {1..100}; do
+	if wmctrl -l | grep -Fq "$WIN_TITLE"; then
+		break
+	fi
+	sleep 0.1
+done
+
+# Move/resize the window; guard errors to avoid set -e exits
+if wmctrl -r "$WIN_TITLE" -e 0,1305,0,1255,665; then
+	echo "Positioned window."
+else
+	echo "Warning: wmctrl couldn't find the window to position."
+fi
+
+# Wait for app to exit without failing the script if it returns non-zero
+# APP_EXIT=0
+# wait $APP_PID || APP_EXIT=$?
+# [[ $APP_EXIT != 0 ]] && echo "Note: app exited with code $APP_EXIT"
+
 exit $FAILED

@@ -549,6 +549,8 @@ int main(int, char**) {
             gui_window_another(show_another_window);
         }
 
+        gui_window_container();
+
         // Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();

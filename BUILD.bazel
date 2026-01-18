@@ -1,0 +1,21 @@
+cc_library(
+    name = "main_lib",
+    srcs = glob(["src/**/*.cpp"], exclude=["src/gui/*.cpp"]),
+    hdrs = glob(["src/**/*.h"]) + glob(["src/gui/*.cpp"]),
+    includes = ["src"],
+    copts = ["-std=c++23"],
+    deps = ["@imgui//:imgui"],
+)
+
+cc_binary(
+    name = "main",
+    copts = ["-std=c++23"],
+    linkopts = [
+        "-lglfw",
+        "-lvulkan",
+        "-ldl",
+        "-lpthread",
+        "-lX11",
+    ],
+    deps = [":main_lib"],
+)

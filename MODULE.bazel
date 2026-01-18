@@ -1,0 +1,70 @@
+module(name = "main")
+
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "grpc", version = "1.76.0")
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "1e08f8e0507b6b6b1f4416a9a22cf5c28beaba93",
+)
+
+# gRPC requires extra module extensions
+grpc = use_extension("@grpc//:extensions.bzl", "grpc")
+use_repo(grpc, "com_github_grpc_grpc")
+
+# Fetch Dear ImGui from GitHub (not BCR)
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+
+http_archive(
+    name = "imgui",
+    sha256 = "0e175d4d941112532549b418ced0bd546abe9024ecb9b5f431f8a67a2197b0ba",  # ← replace with real SHA256
+    strip_prefix = "imgui-1.92.4",
+    urls = ["https://github.com/ocornut/imgui/archive/v1.92.4.tar.gz"],
+    build_file_content = """
+# BUILD file for Dear ImGui (auto-generated)
+
+exports_files([
+    "imgui.cpp",
+    "imgui_draw.cpp",
+    "imgui_tables.cpp",
+    "imgui_widgets.cpp",
+    "imconfig.h",
+    "imgui.h",
+    "imgui_internal.h",
+    "imstb_rectpack.h",
+    "imstb_textedit.h",
+    "imstb_truetype.h",
+    "backends/imgui_impl_glfw.cpp",
+    "backends/imgui_impl_vulkan.cpp",
+    "backends/imgui_impl_glfw.h",
+    "backends/imgui_impl_vulkan.h",
+], visibility = ["//visibility:public"])
+
+cc_library(
+    name = "imgui",
+    srcs = [
+        "imgui.cpp",
+        "imgui_draw.cpp",
+        "imgui_tables.cpp",
+        "imgui_widgets.cpp",
+        "backends/imgui_impl_glfw.cpp",
+        "backends/imgui_impl_vulkan.cpp",
+    ],
+    hdrs = [
+        "imconfig.h",
+        "imgui.h",
+        "imgui_internal.h",
+        "imstb_rectpack.h",
+        "imstb_textedit.h",
+        "imstb_truetype.h",
+        "backends/imgui_impl_glfw.h",
+        "backends/imgui_impl_vulkan.h",
+    ],
+    includes = [".", "backends"],
+    strip_include_prefix = "",
+    visibility = ["//visibility:public"],
+)
+""",
+)
