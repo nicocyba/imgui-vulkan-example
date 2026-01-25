@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include "imgui.h"
+
+static const char* WINDOW_TITLE = "My Title";
 
 class WindowManager {
 private:

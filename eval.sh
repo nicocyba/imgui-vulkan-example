@@ -65,7 +65,7 @@ LSAN_OPTIONS=suppressions=lsan.supp ./bin/main &
 APP_PID=$!
 
 # Wait for the window to appear (up to ~10s)
-WIN_TITLE='Dear ImGui GLFW+Vulkan example'
+WIN_TITLE='My Title'
 for i in {1..100}; do
 	if wmctrl -l | grep -Fq "$WIN_TITLE"; then
 		break
