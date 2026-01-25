@@ -17,13 +17,17 @@
 		// X11 auth passthrough
 		"--env", "XAUTHORITY=/tmp/.Xauthority",
 		"--volume", "${localEnv:XAUTHORITY}:/tmp/.Xauthority:ro",
+		// Wayland socket (if host uses Wayland)
+		"--volume", "${localEnv:XDG_RUNTIME_DIR}:/run/user/1000:z",
+		"--env", "XDG_RUNTIME_DIR=/run/user/1000",
 		// Allow direct rendering devices (GPU/DRI)
 		"--device", "/dev/dri"
 	],
 
 	// Fallback to software rendering if GPU isn't available
 	"containerEnv": {
-		"LIBGL_ALWAYS_SOFTWARE": "0"
+		"LIBGL_ALWAYS_SOFTWARE": "0",
+		"XDG_SESSION_TYPE": "${localEnv:XDG_SESSION_TYPE}"
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

@@ -555,8 +555,7 @@ int main(int, char**) {
         // Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
-        const bool is_minimized
-            = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+        const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if (!is_minimized) {
             wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
             wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
