@@ -28,7 +28,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include "frontend/window_demo.cpp"
+#include "frontend/gui/window_demo.cpp"
+#include "frontend/gui/window_manager.h"
 
 // Volk headers
 #ifdef IMGUI_IMPL_VULKAN_USE_VOLK
@@ -495,9 +496,11 @@ int main(int, char**) {
     // IM_ASSERT(font != nullptr);
 
     // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
+    // bool show_demo_window = true;
+    // bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    WindowManager windowManager(clear_color);
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -534,6 +537,11 @@ int main(int, char**) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        /*
+        BUILD CUSTOM GUI
+        */
+        windowManager.render();
+
         // 1. Show the big demo window (Most of the sample code is in
         // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
         // ImGui!).
@@ -543,19 +551,20 @@ int main(int, char**) {
 
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair
         // to create a named window.
-        gui_window_simple(show_demo_window, show_another_window, clear_color);
+        // gui_window_simple(show_demo_window, show_another_window, clear_color);
 
         // 3. Show another simple window.
-        if (show_another_window) {
-            gui_window_another(show_another_window);
-        }
+        // if (show_another_window) {
+        //     gui_window_another(show_another_window);
+        // }
 
-        gui_window_container();
+        // gui_window_container();
 
         // Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
-        const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+        const bool is_minimized
+            = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if (!is_minimized) {
             wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
             wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;

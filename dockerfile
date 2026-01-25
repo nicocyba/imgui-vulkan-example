@@ -30,7 +30,9 @@ RUN apt update && apt install -y \
     mesa-vulkan-drivers \
     openjdk-17-jdk \
     protobuf-compiler \
-    git
+    git \
+    wmctrl \
+    cmake
 
 # Set Clang 20 as compiler
 ENV CC=clang-20

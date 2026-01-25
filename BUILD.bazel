@@ -6,7 +6,7 @@ cc_library(
     hdrs = glob(["src/**/*.h", "src/**/*.cpp"]),
     includes = ["src"],
     copts = ["-std=c++23"],
-    deps = ["@imgui//:imgui"],
+    deps = ["@imgui_local//:imgui"],
 )
 
 cc_binary(
@@ -17,7 +17,7 @@ cc_binary(
         "-lvulkan",
         "-ldl",
         "-lpthread",
-        "-lX11",
+        # "-lX11",
     ],
     deps = [":main_lib"],
 )

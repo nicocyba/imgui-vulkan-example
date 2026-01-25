@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-
+clear
 
 # Usage: ./eval.sh [--tidy|--no-tidy]
 # Default is to run clang-tidy. Pass --no-tidy to skip it.
