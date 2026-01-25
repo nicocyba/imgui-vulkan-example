@@ -57,9 +57,7 @@ static ImGui_ImplVulkanH_Window g_MainWindowData;
 static uint32_t g_MinImageCount = 2;
 static bool g_SwapChainRebuild = false;
 
-static void glfw_error_callback(int error, const char* description) {
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
+static void glfw_error_callback(int error, const char* description) { fprintf(stderr, "GLFW Error %d: %s\n", error, description); }
 static void check_vk_result(VkResult err) {
     if (err == VK_SUCCESS) {
         return;
@@ -85,14 +83,12 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags,
     (void)messageCode;
     (void)pUserData;
     (void)pLayerPrefix; // Unused arguments
-    fprintf(
-        stderr, "[vulkan] Debug report from ObjectType: %i\nMessage: %s\n\n", objectType, pMessage);
+    fprintf(stderr, "[vulkan] Debug report from ObjectType: %i\nMessage: %s\n\n", objectType, pMessage);
     return VK_FALSE;
 }
 #endif // APP_USE_VULKAN_DEBUG_REPORT
 
-static bool IsExtensionAvailable(
-    const ImVector<VkExtensionProperties>& properties, const char* extension) {
+static bool IsExtensionAvailable(const ImVector<VkExtensionProperties>& properties, const char* extension) {
     for (const VkExtensionProperties& p : properties) {
         if (strcmp(p.extensionName, extension) == 0) {
             return true;
@@ -121,8 +117,7 @@ static void SetupVulkan(ImVector<const char*> instance_extensions) {
         check_vk_result(err);
 
         // Enable required extensions
-        if (IsExtensionAvailable(
-                properties, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME)) {
+        if (IsExtensionAvailable(properties, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME)) {
             instance_extensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
         }
 #ifdef VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME
@@ -152,17 +147,14 @@ static void SetupVulkan(ImVector<const char*> instance_extensions) {
         // Setup the debug report callback
 #ifdef APP_USE_VULKAN_DEBUG_REPORT
         auto f_vkCreateDebugReportCallbackEXT
-            = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(
-                g_Instance, "vkCreateDebugReportCallbackEXT");
+            = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkCreateDebugReportCallbackEXT");
         IM_ASSERT(f_vkCreateDebugReportCallbackEXT != nullptr);
         VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
         debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT
-            | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
         debug_report_ci.pfnCallback = debug_report;
         debug_report_ci.pUserData = nullptr;
-        err = f_vkCreateDebugReportCallbackEXT(
-            g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
+        err = f_vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
         check_vk_result(err);
 #endif
     }
@@ -185,8 +177,7 @@ static void SetupVulkan(ImVector<const char*> instance_extensions) {
         ImVector<VkExtensionProperties> properties;
         vkEnumerateDeviceExtensionProperties(g_PhysicalDevice, nullptr, &properties_count, nullptr);
         properties.resize(properties_count);
-        vkEnumerateDeviceExtensionProperties(
-            g_PhysicalDevice, nullptr, &properties_count, properties.Data);
+        vkEnumerateDeviceExtensionProperties(g_PhysicalDevice, nullptr, &properties_count, properties.Data);
 #ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
         if (IsExtensionAvailable(properties, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME)) {
             device_extensions.push_back(VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
@@ -215,8 +206,7 @@ static void SetupVulkan(ImVector<const char*> instance_extensions) {
     // sizes and maxSets.
     {
         VkDescriptorPoolSize pool_sizes[] = {
-            {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                IMGUI_IMPL_VULKAN_MINIMUM_IMAGE_SAMPLER_POOL_SIZE},
+            {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, IMGUI_IMPL_VULKAN_MINIMUM_IMAGE_SAMPLER_POOL_SIZE},
         };
         VkDescriptorPoolCreateInfo pool_info = {};
         pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -234,8 +224,7 @@ static void SetupVulkan(ImVector<const char*> instance_extensions) {
 
 // All the ImGui_ImplVulkanH_XXX structures/functions are optional helpers used
 // by the demo. Your real engine/app may not use them.
-static void SetupVulkanWindow(
-    ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR surface, int width, int height) {
+static void SetupVulkanWindow(ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR surface, int width, int height) {
     wd->Surface = surface;
 
     // Check for WSI support
@@ -247,28 +236,23 @@ static void SetupVulkanWindow(
     }
 
     // Select Surface Format
-    const VkFormat requestSurfaceImageFormat[] = {VK_FORMAT_B8G8R8A8_UNORM,
-        VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM};
+    const VkFormat requestSurfaceImageFormat[] = {VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM};
     const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface,
-        requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat),
-        requestSurfaceColorSpace);
+    wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(
+        g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
     // Select Present Mode
 #ifdef APP_USE_UNLIMITED_FRAME_RATE
-    VkPresentModeKHR present_modes[]
-        = {VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR};
+    VkPresentModeKHR present_modes[] = {VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR};
 #else
     VkPresentModeKHR present_modes[] = {VK_PRESENT_MODE_FIFO_KHR};
 #endif
-    wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(
-        g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
+    wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
     // printf("[vulkan] Selected PresentMode = %d\n", wd->PresentMode);
 
     // Create SwapChain, RenderPass, Framebuffer, etc.
     IM_ASSERT(g_MinImageCount >= 2);
-    ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, wd,
-        g_QueueFamily, g_Allocator, width, height, g_MinImageCount, 0);
+    ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount, 0);
 }
 
 static void CleanupVulkan() {
@@ -277,8 +261,7 @@ static void CleanupVulkan() {
 #ifdef APP_USE_VULKAN_DEBUG_REPORT
     // Remove the debug report callback
     auto f_vkDestroyDebugReportCallbackEXT
-        = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(
-            g_Instance, "vkDestroyDebugReportCallbackEXT");
+        = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkDestroyDebugReportCallbackEXT");
     f_vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
 #endif // APP_USE_VULKAN_DEBUG_REPORT
 
@@ -286,17 +269,12 @@ static void CleanupVulkan() {
     vkDestroyInstance(g_Instance, g_Allocator);
 }
 
-static void CleanupVulkanWindow() {
-    ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator);
-}
+static void CleanupVulkanWindow() { ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator); }
 
 static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data) {
-    VkSemaphore image_acquired_semaphore
-        = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
-    VkSemaphore render_complete_semaphore
-        = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
-    VkResult err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX,
-        image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
+    VkSemaphore image_acquired_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
+    VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
+    VkResult err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
     if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR) {
         g_SwapChainRebuild = true;
     }
@@ -365,8 +343,7 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd) {
     if (g_SwapChainRebuild) {
         return;
     }
-    VkSemaphore render_complete_semaphore
-        = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
+    VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
     VkPresentInfoKHR info = {};
     info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     info.waitSemaphoreCount = 1;
@@ -384,8 +361,7 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd) {
     if (err != VK_SUBOPTIMAL_KHR) {
         check_vk_result(err);
     }
-    wd->SemaphoreIndex = (wd->SemaphoreIndex + 1)
-        % wd->SemaphoreCount; // Now we can use the next set of semaphores
+    wd->SemaphoreIndex = (wd->SemaphoreIndex + 1) % wd->SemaphoreCount; // Now we can use the next set of semaphores
 }
 
 // Main code
@@ -397,10 +373,8 @@ int main(int, char**) {
 
     // Create window with Vulkan context
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(
-        glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
-    GLFWwindow* window = glfwCreateWindow(
-        (int)(1280 * main_scale), (int)(800 * main_scale), WINDOW_TITLE, nullptr, nullptr);
+    float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
+    GLFWwindow* window = glfwCreateWindow((int)(WINDOW_WIDTH * main_scale), (int)(WINDOW_HEIGHT * main_scale), WINDOW_TITLE, nullptr, nullptr);
     if (!glfwVulkanSupported()) {
         printf("GLFW: Vulkan Not Supported\n");
         return 1;
@@ -518,12 +492,10 @@ int main(int, char**) {
         // Resize swap chain?
         int fb_width, fb_height;
         glfwGetFramebufferSize(window, &fb_width, &fb_height);
-        if (fb_width > 0 && fb_height > 0
-            && (g_SwapChainRebuild || g_MainWindowData.Width != fb_width
-                || g_MainWindowData.Height != fb_height)) {
+        if (fb_width > 0 && fb_height > 0 && (g_SwapChainRebuild || g_MainWindowData.Width != fb_width || g_MainWindowData.Height != fb_height)) {
             ImGui_ImplVulkan_SetMinImageCount(g_MinImageCount);
-            ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, wd,
-                g_QueueFamily, g_Allocator, fb_width, fb_height, g_MinImageCount, 0);
+            ImGui_ImplVulkanH_CreateOrResizeWindow(
+                g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, fb_width, fb_height, g_MinImageCount, 0);
             g_MainWindowData.FrameIndex = 0;
             g_SwapChainRebuild = false;
         }
@@ -563,8 +535,7 @@ int main(int, char**) {
         // Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
-        const bool is_minimized
-            = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+        const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if (!is_minimized) {
             wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
             wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
