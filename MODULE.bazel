@@ -2,13 +2,21 @@ module(name = "main")
 
 bazel_dep(name = "protobuf", version = "33.4")
 bazel_dep(name = "grpc", version = "1.76.0")
-bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
-git_override(
-    module_name = "hedron_compile_commands",
-    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
-    commit = "1e08f8e0507b6b6b1f4416a9a22cf5c28beaba93",
-)
+bazel_dep(name = "rules_python", version = "1.8.1")
+bazel_dep(name = "rules_cc", version = "0.2.14")
 
+# # Configure Python toolchain first (needed by hedron)
+# python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+# python.toolchain(python_version = "3.13")
+
+# bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+
+# # Use latest git version of hedron_compile_commands
+# git_override(
+#     module_name = "hedron_compile_commands",
+#     commit = "abb61a688167623088f8768cc9264798df6a9d10",
+#     remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+# )
 # gRPC requires extra module extensions
 grpc = use_extension("@grpc//:extensions.bzl", "grpc")
 use_repo(grpc, "com_github_grpc_grpc")
@@ -19,11 +27,13 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 
 http_archive(
     name = "imgui",
-    sha256 = "0e175d4d941112532549b418ced0bd546abe9024ecb9b5f431f8a67a2197b0ba",  # ← replace with real SHA256
-    strip_prefix = "imgui-1.92.4",
-    urls = ["https://github.com/ocornut/imgui/archive/v1.92.4.tar.gz"],
+    sha256 = "c816c20e8c75f3e15ae867350e79925502d1a6a85938bb1a73b8927e5f31f9cb",  # ← replace with real SHA256
+    strip_prefix = "imgui-1.92.5-docking",
+    urls = ["https://github.com/ocornut/imgui/archive/v1.92.5-docking.tar.gz"],
     build_file_content = """
 # BUILD file for Dear ImGui (auto-generated)
+
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 exports_files([
     "imgui.cpp",

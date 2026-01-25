@@ -1,0 +1,2 @@
+# Output symlinks to a custom folder
+build --symlink_prefix=build/

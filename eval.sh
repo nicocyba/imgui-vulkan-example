@@ -26,7 +26,12 @@ mkdir -p bin
 # cmake -S . -B build && cmake --build build
 #cp ./build/bin/main ./bin
 
-docker build . --target export --output "type=local,dest=."
+bazel build //:main 
+
+mkdir -p bin
+cp build/bin/main bin/main
+
+# docker build . --target export --output "type=local,dest=."
 
 clang-format-20 -i src/*.*pp
 
@@ -43,13 +48,17 @@ fi
 
 
 # Compile protobuf
-export PATH="$PATH:$HOME/.local/protoc-33.4-linux-x86_64/bin"
-SRC_DIR=src
-DST_DIR=src/messages
-protoc --version
-protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/addressbook.proto
+SRC_DIR=src/proto
+FRONTEND_DST=src/frontend
+BACKEND_DST=src/backend
 
-exit $FAILED
+protoc --version
+protoc -I=$SRC_DIR --cpp_out=$FRONTEND_DST $SRC_DIR/addressbook.proto
+protoc -I=$SRC_DIR --cpp_out=$BACKEND_DST $SRC_DIR/addressbook.proto
+
+echo "Protobuf compiled to $FRONTEND_DST and $BACKEND_DST"
+
+# exit $FAILED
 
 # Launch app in background so we can position its window
 LSAN_OPTIONS=suppressions=lsan.supp ./bin/main &

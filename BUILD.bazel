@@ -1,7 +1,9 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
 cc_library(
     name = "main_lib",
-    srcs = glob(["src/**/*.cpp"], exclude=["src/gui/*.cpp"]),
-    hdrs = glob(["src/**/*.h"]) + glob(["src/gui/*.cpp"]),
+    srcs = glob(["src/**/*.cpp"]),
+    hdrs = glob(["src/**/*.h", "src/**/*.cpp"]),
     includes = ["src"],
     copts = ["-std=c++23"],
     deps = ["@imgui//:imgui"],
