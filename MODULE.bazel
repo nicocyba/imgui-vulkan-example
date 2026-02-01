@@ -28,6 +28,6 @@ new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.
 # Use the vendored ImGui submodule instead of downloading.
 new_local_repository(
 	name = "imgui_local",
-	path = "external/imgui",
-	build_file = "//:imgui.BUILD.bazel",
+	path = "third_party/imgui",
+	build_file = "//third_party:imgui.BUILD",
 )
