@@ -2,7 +2,7 @@
     // "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/src",
-        "${workspaceFolder}/external/imgui",
-        "${workspaceFolder}/external/imgui/backends"
+        "${workspaceFolder}/third_party/imgui",
+        "${workspaceFolder}/third_party/imgui/backends"
     ]
 }
