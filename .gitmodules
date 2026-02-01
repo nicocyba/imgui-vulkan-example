@@ -1,4 +1,7 @@
-[submodule "external/imgui"]
-	path = external/imgui
+[submodule "third_party/imgui"]
+	path = third_party/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = main
+[submodule "third_party/grpc"]
+	path = third_party/grpc
+	url = git@github.com:grpc/grpc.git
