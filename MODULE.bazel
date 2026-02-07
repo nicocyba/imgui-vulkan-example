@@ -22,7 +22,7 @@ grpc = use_extension("@grpc//:extensions.bzl", "grpc")
 use_repo(grpc, "com_github_grpc_grpc")
 
 # Fetch Dear ImGui from GitHub (not BCR)
-http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+# http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 
 # Use the vendored ImGui submodule instead of downloading.
