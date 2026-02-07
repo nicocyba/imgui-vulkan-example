@@ -49,8 +49,8 @@ fi
 
 # Compile protobuf
 SRC_DIR=src/proto
-FRONTEND_DST=src/frontend
-BACKEND_DST=src/backend
+FRONTEND_DST=src/frontend/messages
+BACKEND_DST=src/backend/messages
 
 protoc --version
 protoc -I=$SRC_DIR --cpp_out=$FRONTEND_DST $SRC_DIR/addressbook.proto

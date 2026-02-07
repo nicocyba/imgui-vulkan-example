@@ -1,8 +1,7 @@
 #include "window_manager.h"
 
-WindowManager::WindowManager(ImVec4& clear_color_) : clear_color(clear_color_) {}
 
-void WindowManager::render() {
+bool WindowManager::render_content() {
     ImGuiIO& io = ImGui::GetIO();
     // ImGui::PushItemWidth(-ImGui::GetContentRegionAvail().x * 0.5f);
 
@@ -113,4 +112,5 @@ void WindowManager::render() {
     ImGui::End();
 
     ImGui::ShowDemoWindow();
+    return true;
 }
