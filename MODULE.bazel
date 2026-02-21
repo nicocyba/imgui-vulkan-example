@@ -1,33 +1,38 @@
 module(name = "main")
 
-bazel_dep(name = "protobuf", version = "33.4")
-bazel_dep(name = "grpc", version = "1.76.0")
-bazel_dep(name = "rules_python", version = "1.8.1")
-bazel_dep(name = "rules_cc", version = "0.2.14")
+bazel_dep(name = "rules_cc", version = "0.2.17")
+bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
+bazel_dep(name = "rules_python", version = "1.8.4")
 
-# # Configure Python toolchain first (needed by hedron)
-# python = use_extension("@rules_python//python/extensions:python.bzl", "python")
-# python.toolchain(python_version = "3.13")
-
-# bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
-
-# # Use latest git version of hedron_compile_commands
-# git_override(
-#     module_name = "hedron_compile_commands",
-#     commit = "abb61a688167623088f8768cc9264798df6a9d10",
-#     remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
-# )
-# gRPC requires extra module extensions
-grpc = use_extension("@grpc//:extensions.bzl", "grpc")
-use_repo(grpc, "com_github_grpc_grpc")
-
-# Fetch Dear ImGui from GitHub (not BCR)
-# http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+# python.toolchain(
+#     is_default = True,
+#     python_version = "3.12.3",  # or "3.12", "3.10", etc.
+# )
+
+##########################################
+# EXTERNAL DEPS
+##########################################
+# bazel_dep(name = "grpc", version = "1.76.0")  # from BCR, no local override
+# bazel_dep(name = "protobuf", version = "33.5")
 
 # Use the vendored ImGui submodule instead of downloading.
 new_local_repository(
-	name = "imgui_local",
-	path = "third_party/imgui",
-	build_file = "//third_party:imgui.BUILD",
+    name = "imgui_local",
+    build_file = "//third_party:imgui.BUILD",
+    path = "third_party/imgui",
+)
+
+bazel_dep(name = "grpc", version = "")
+local_path_override(
+    module_name = "grpc",
+    path = "third_party/grpc",
+)
+
+bazel_dep(name = "protobuf", version = "")
+local_path_override(
+    module_name = "protobuf",
+    path = "third_party/protobuf",
 )

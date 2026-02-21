@@ -8,7 +8,10 @@ RUN apt update && apt install -y \
     unzip \
     gnupg \
     software-properties-common \
-    lsb-release
+    lsb-release \ 
+    autoconf \
+    libtool \
+    pkg-config
 
 # Add LLVM APT key (modern method)
 RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg

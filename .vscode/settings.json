@@ -3,6 +3,10 @@
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/src",
         "${workspaceFolder}/third_party/imgui",
-        "${workspaceFolder}/third_party/imgui/backends"
-    ]
+        "${workspaceFolder}/third_party/imgui/backends",
+        "${workspaceFolder}/third_party/grpc/include",
+        "${workspaceFolder}/third_party/protobuf"
+    ],
+    "git.detectSubmodules": true,
+    "git.detectSubmodulesLimit": 1
 }

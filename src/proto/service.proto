@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package uicontrol;
+
+service GuiService {
+  // Continuous updates (Server streams data to Client)
+  rpc GetUpdates (Empty) returns (stream UpdateResponse);
+
+  // Button click action (Simple Request/Response)
+  rpc TriggerAction (ActionRequest) returns (ActionResponse);
+}
+
+message Empty {}
+
+message UpdateResponse {
+  string status_message = 1;
+  float progress = 2;
+}
+
+message ActionRequest {
+  string command = 1;
+}
+
+message ActionResponse {
+  bool success = 1;
+}
