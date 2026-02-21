@@ -43,7 +43,7 @@ ENV CXX=clang++-20
 
 # Install latest protobuf from GitHub
 RUN cd /tmp && \
-    curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v33.4/protoc-33.4-linux-x86_64.zip && \
+    curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v33.5/protoc-33.5-linux-x86_64.zip && \
     unzip -o protoc.zip -d /usr/local && \
     rm protoc.zip && \
     protoc --version
@@ -53,6 +53,10 @@ RUN curl -L https://github.com/bazelbuild/bazelisk/releases/download/v1.28.0/baz
     && chmod +x /usr/local/bin/bazelisk \
     && ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
 
+    # Install Buildifier
+RUN curl -LO https://github.com/bazelbuild/buildtools/releases/latest/download/buildifier-linux-amd64 \
+    && mv buildifier-linux-amd64 /usr/local/bin/buildifier \
+    && chmod +x /usr/local/bin/buildifier
 # WORKDIR /workspace
 # COPY . .
 

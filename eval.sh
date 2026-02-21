@@ -23,6 +23,31 @@ mkdir -p build
 rm -rf bin
 mkdir -p bin
 
+# BUILD grpc_proto plugin
+cd third_party/grpc
+mkdir -p cmake/build && cd cmake/build
+cmake ../.. -DCMAKE_BUILD_TYPE=Release
+make -j$(nproc) grpc_cpp_plugin
+cd ../../../..
+
+# Compile protobuf
+SRC_DIR=src/proto
+# FRONTEND_DST=src/frontend/messages
+# BACKEND_DST=src/backend/messages
+
+protoc --version
+# protoc -I=$SRC_DIR --cpp_out=$FRONTEND_DST $SRC_DIR/service.proto 
+# protoc -I=$SRC_DIR --cpp_out=$BACKEND_DST $SRC_DIR/service.proto
+
+protoc \
+	-I=$SRC_DIR \
+	--cpp_out=$SRC_DIR \
+	--grpc_out=$SRC_DIR \
+	--plugin=protoc-gen-grpc=third_party/grpc/cmake/build/grpc_cpp_plugin \
+	$SRC_DIR/service.proto
+
+echo "Protobuf compiled to $SRC_DIR"
+
 # cmake -S . -B build && cmake --build build
 #cp ./build/bin/main ./bin
 
@@ -47,16 +72,7 @@ fi
 [[ $FAILED == 0 ]] && echo "Checks PASSED." || echo "Some checks FAILED."
 
 
-# Compile protobuf
-SRC_DIR=src/proto
-FRONTEND_DST=src/frontend/messages
-BACKEND_DST=src/backend/messages
 
-protoc --version
-protoc -I=$SRC_DIR --cpp_out=$FRONTEND_DST $SRC_DIR/addressbook.proto
-protoc -I=$SRC_DIR --cpp_out=$BACKEND_DST $SRC_DIR/addressbook.proto
-
-echo "Protobuf compiled to $FRONTEND_DST and $BACKEND_DST"
 
 # exit $FAILED
 

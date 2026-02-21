@@ -6,7 +6,7 @@
 #include <chrono>
 
 #include <grpcpp/grpcpp.h>
-#include "service.grpc.pb.h"
+#include "proto/service.grpc.pb.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
