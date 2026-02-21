@@ -48,16 +48,18 @@ protoc \
 
 echo "Protobuf compiled to $SRC_DIR"
 
+# Build project
 # cmake -S . -B build && cmake --build build
 #cp ./build/bin/main ./bin
 
 bazel build //:main 
 
+
+# Copy binaries to bin folder
 mkdir -p bin
 cp build/bin/main bin/main
 
-# docker build . --target export --output "type=local,dest=."
-
+# Check code formatting
 clang-format-20 -i src/*.*pp
 
 FAILED=0

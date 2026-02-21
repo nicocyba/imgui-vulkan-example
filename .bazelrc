@@ -1,2 +1,3 @@
 # Output symlinks to a custom folder
 build --symlink_prefix=build/
+# startup --output_base=build/
