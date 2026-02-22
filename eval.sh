@@ -18,7 +18,7 @@ for arg in "$@"; do
 	esac
 done
 
-rm -rf build
+# rm -rf build
 mkdir -p build
 rm -rf bin
 mkdir -p bin

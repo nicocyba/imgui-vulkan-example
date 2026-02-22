@@ -35,7 +35,8 @@ RUN apt update && apt install -y \
     protobuf-compiler \
     git \
     wmctrl \
-    cmake
+    cmake \
+    gdb
 
 # Set Clang 20 as compiler
 ENV CC=clang-20
@@ -57,6 +58,8 @@ RUN curl -L https://github.com/bazelbuild/bazelisk/releases/download/v1.28.0/baz
 RUN curl -LO https://github.com/bazelbuild/buildtools/releases/latest/download/buildifier-linux-amd64 \
     && mv buildifier-linux-amd64 /usr/local/bin/buildifier \
     && chmod +x /usr/local/bin/buildifier
+
+    
 # WORKDIR /workspace
 # COPY . .
 
